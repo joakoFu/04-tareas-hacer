@@ -1,13 +1,14 @@
 const inquirer = require('inquirer');
+const { validate } = require('uuid');
 require('colors');
 const menuOpts = [{
     type:'list',
-    name: 'opcion',
+    name: 'opt',
     message:'Que deseas hacer?',
     choices:[
             {
-                value:'1',
-                name:'1.-Crear una tarea'
+                value:'1' ,
+                name:'1.-Crear una tareaa'
             },
             {
                 value:'2',
@@ -35,15 +36,15 @@ const menuOpts = [{
             },
         ]
 }];
-const inquirerMenu =  async()=>{
+const inquirerMenu =  async() =>{
     console.clear();
     console.log('====================='.green);
     console.log('Seleccione una opcion'.green);
     console.log('====================='.green);
-    const opt = await inquirer.prompt(menuOpts);
+    const { opt } = await inquirer.prompt(menuOpts);
     return opt;
 }
-const pausa=async()  =>{
+const pausa = async()  =>{
     console.log('PAUSA')
     const question = [
         {
@@ -56,7 +57,26 @@ const pausa=async()  =>{
     
 }
 
+const leerInput = async(message) =>{
+    const question= [
+        {
+            type: 'input',
+            name: 'desc',
+            message,
+            validate(value){
+                if(value.length ===0){
+                    return `Por favor ingrese valor`;
+                }
+                return true;
+            }
+        }
+    ];
+    const {desc} = await  inquirer.prompt(question);
+    return desc;
+};
+
 module.exports={
     inquirerMenu,
-    pausa
+    pausa,
+    leerInput
 }

@@ -33,7 +33,7 @@ const pausa=()  =>{
                 input: process.stdin,
                 output: process.stdout
             });
-            rl.question(`\nPresione ${'ENTER'.green} para continuar`,()=>{
+            rl.question(`\n Presione ${'ENTER'.green} para continuar`,()=>{
                 rl.close;
                 resolve();
             });
