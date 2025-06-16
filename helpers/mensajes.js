@@ -26,7 +26,7 @@ const mostrarMenu=() => {
         });
     
 }
-const pausa = () =>{
+const pausa=()  =>{
     console.log('PAUSA')
         return new Promise(resolve =>{
             const rl = require('readline').createInterface({
