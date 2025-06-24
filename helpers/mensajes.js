@@ -7,13 +7,13 @@ const mostrarMenu=() => {
         console.log('====================='.green);
         console.log('Seleccione una opcion'.green);
         console.log('====================='.green);
-        console.log(`1.-Crear tarea`);
-        console.log(`2.-Listar tarea`);
-        console.log(`3.-Listar tarea completadas`);
-        console.log(`4.-Listar tarea pendientes`);
-        console.log(`5.-Completar tarea(s)`);
-        console.log(`6.-Borrar tarea`);
-        console.log(`0.-Salir`);
+        console.log(`1`.green`.-Crear tarea`);
+        console.log(`2`.green`.-Listar tarea`);
+        console.log(`3`.green`.-Listar tarea completadas`);
+        console.log(`4`.green`.-Listar tarea pendientes`);
+        console.log(`5`.green`.-Completar tarea(s)`);
+        console.log(`6`.green`.-Borrar tarea`);
+        console.log(`0`.green`.-Salir`);
         const rl = require('readline').createInterface({
             input: process.stdin,
             output: process.stdout

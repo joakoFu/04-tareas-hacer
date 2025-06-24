@@ -1,48 +1,81 @@
 require('colors');
 
-//const {mostrarMenu, pausa} = require('./helpers/mensajes')
-const { inquirerMenu,pausa,leerInput } = require('./helpers/inquirer');
-const Tarea = require('./models/tarea');
+const { guardarDB, leerDB } = require('./helpers/guardarArchivos');
+const { inquirerMenu, 
+        pausa,
+        leerInput,
+        listadoTareasBorrar,
+        confirmar,
+        mostrarListadoChecklist
+} = require('./helpers/inquirer');
+
 const Tareas = require('./models/tareas');
-console.clear();
 
-const main = async()=>{
-    let opt ='0';
+
+const main = async() => {
+
+    let opt = '';
     const tareas = new Tareas();
-    do{
+
+    const tareasDB = leerDB();
+
+    if ( tareasDB ) { // cargar tareas
+        tareas.cargarTareasFromArray( tareasDB );
+    }
+
+    do {
+        // Imprimir el menú
         opt = await inquirerMenu();
-        console.log('la opcion dada es :_'+ opt);
-        switch (opt){
+
+        switch (opt) {
             case '1':
-                console.log('\n case1'+opt);
-                const desc = await leerInput(`Descripcion: `)
-                tareas.crearTarea(desc);
-                console.log(`${desc}`);
-            break;
-            case '2':
-                console.log('\n'+opt);
-                console.log(tareas)
+                // crear opcion
+                const desc = await leerInput('Descripción:');
+                tareas.crearTarea( desc );
             break;
 
-            case '3':
-                console.log('\n'+opt);
+            case '2':
+                tareas.listadoCompleto();
             break;
-            case '4':
-                console.log('\n'+opt);
+            
+            case '3': // listar completadas
+                tareas.listarPendientesCompletadas(true);
             break;
-            case '5':
-                console.log('\n'+opt);
+
+            case '4': // listar pendientes
+                tareas.listarPendientesCompletadas(false);
             break;
-            case '6':
-                console.log('\n'+opt);
+
+            case '5': // completado | pendiente
+                const ids = await mostrarListadoChecklist( tareas.listadoArr );
+                tareas.toggleCompletadas( ids );
             break;
-            case '0':
-                console.log('\n'+opt);
+                       
+            case '6': // Borrar
+                const id = await listadoTareasBorrar( tareas.listadoArr );
+                if ( id !== '0' ) {
+                    const ok = await confirmar('¿Está seguro?');
+                    if ( ok ) {
+                        tareas.borrarTarea( id );
+                        console.log('Tarea borrada');
+                    }
+                }
             break;
+        
         }
-        //tareas._listado[tarea.id] = tarea;
+
+
+        guardarDB( tareas.listadoArr );
+
         await pausa();
-    }while(opt !== '0')
-    console.log('sali del while');
+
+    } while( opt !== '0' );
+
+
+    // pausa();
+
 }
+
+
 main();
+
